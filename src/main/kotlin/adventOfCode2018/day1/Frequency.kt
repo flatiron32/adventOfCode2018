@@ -6,7 +6,6 @@ package adventOfCode2018.day1
 import java.io.File
 
 fun main(args: Array<String>) {
-    println(File("src/main/resources").absolutePath)
     var freq = 0
     val freqCount = mutableMapOf<Int, Int>()
     val fileName = "src/main/resources/frequencyInput.txt"
