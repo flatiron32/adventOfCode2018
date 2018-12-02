@@ -9,20 +9,35 @@ fun main(args: Array<String>) {
     var twoCount = 0
     var threeCount = 0
     val fileName = "src/main/resources/boxIds.txt"
-    File(fileName).inputStream().bufferedReader().useLines { lines -> lines.forEach { line ->
-        val letterCount = mutableMapOf<Char, Int>()
-        line.forEach {
-            val count = letterCount.getOrDefault(it, 0) + 1
-            letterCount[it] = count
-        }
+    File(fileName).inputStream().bufferedReader().useLines { lines ->
+        val collectedLines = mutableListOf<String>()
+        lines.forEach { line ->
+            collectedLines.add(line)
+            val letterCount = mutableMapOf<Char, Int>()
+            line.forEachIndexed { index, it ->
+                val count = letterCount.getOrDefault(it, 0) + 1
+                letterCount[it] = count
+                val re: Regex = if (index == 0) {
+                    Regex("." + line.substring(index + 1))
+                } else {
+                    Regex(line.substring(0..(index - 1)) + "." + line.substring(index + 1))
+                }
+                //println("Looking for $re")
+                val matches = mutableListOf<String>()
+                collectedLines.filterTo(matches) { it.matches(re) }
+                if (matches.count() == 2) {
+                    println(matches)
+                    println(re)
+                }
+            }
 
-        if (letterCount.containsValue(2)) {
-            twoCount++
-        }
+            if (letterCount.containsValue(2)) {
+                twoCount++
+            }
 
-        if (letterCount.containsValue(3)) {
-            threeCount++
-        }
+            if (letterCount.containsValue(3)) {
+                threeCount++
+            }
         }
     }
 
