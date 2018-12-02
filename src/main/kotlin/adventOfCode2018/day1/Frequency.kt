@@ -8,14 +8,23 @@ import java.io.File
 fun main(args: Array<String>) {
     println(File("src/main/resources").absolutePath)
     var freq = 0
+    val freqCount = mutableMapOf<Int, Int>()
     val fileName = "src/main/resources/frequencyInput.txt"
-    File(fileName).inputStream().bufferedReader().useLines { lines -> lines.forEach {
-        freq += if (it[0] == '+') {
-            it.substring(1).toInt()
-        } else {
-            it.toInt()
-        }
-    } }
-
-    println("The frequency $freq")
+    var iter = 0
+    while (true) {
+        File(fileName).inputStream().bufferedReader().useLines { lines -> lines.forEach {
+            freq += if (it[0] == '+') {
+                it.substring(1).toInt()
+            } else {
+                it.toInt()
+            }
+            val count = freqCount.getOrDefault(freq, 0) + 1
+            freqCount[freq] = count
+            if (count == 2) {
+                println("Frequency $freq found twice")
+                return
+            }
+        } }
+        println("The ${iter++}  frequency $freq")
+    }
 }
